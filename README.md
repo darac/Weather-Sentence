@@ -4,7 +4,7 @@ Weather-Sentence
 A PHP script to make a readable sentence of the current and today's weather.
 
 Two parameters are currently handled:
-  * loc=<decimal latitude>,<decimal longitude>
+  * loc={decimal latitude},{decimal longitude}
     Where the forecast is for.
   * debug
     Echo the JSON inputs.

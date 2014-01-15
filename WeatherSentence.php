@@ -42,8 +42,8 @@ class WeatherSentence
         $parsed_json = json_decode($json_string);
         if ($this->debug)
             echo "<pre><code>" . json_encode($parsed_json, JSON_PRETTY_PRINT) . "</code></pre><br />";
-        if (isset($parsed_json->{'geonames'}[0]->{'toponymName'})) {
-            $location_name = $parsed_json->{'geonames'}[0]->{'toponymName'};
+        if (isset($parsed_json->{'geonames'}[0]->{'name'})) {
+            $location_name = $parsed_json->{'geonames'}[0]->{'name'};
         } else {
             $location_name = 'your location';
         }
@@ -282,6 +282,9 @@ class WeatherSentence
             return 'heavy ';
         }
     }
+}
+
+class WeatherSentenceTest extends PHPUnit_Framework_TestCase {
 }
 
 ?>

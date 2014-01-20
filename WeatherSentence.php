@@ -42,8 +42,8 @@ class WeatherSentence
         $parsed_json = json_decode($json_string);
         if ($this->debug)
             echo "<pre><code>" . json_encode($parsed_json, JSON_PRETTY_PRINT) . "</code></pre><br />";
-        if (isset($parsed_json->{'geonames'}[0]->{'name'})) {
-            $location_name = $parsed_json->{'geonames'}[0]->{'name'};
+        if (isset($parsed_json->geonames[0]->name)) {
+            $location_name = $parsed_json->geonames[0]->name;
         } else {
             $location_name = 'your location';
         }
@@ -81,26 +81,26 @@ class WeatherSentence
             $weather = $this->fetchWeather();
         }
         
-        $currentphrase = 'The Weather for ' . $this->LookupLocation() . ' is ' . $weather->{'currently'}->{'summary'} . '. ';
+        $currentphrase = 'The weather for ' . $this->LookupLocation() . ' is ' . $weather->currently->summary . '. ';
         
         // Parts
-        if (isset($weather->{'currently'}->{'temperature'})) {
-            $tempstring = 'it is ' . number_format($weather->{'currently'}->{'temperature'}) . ' degrees';
+        if (isset($weather->currently->temperature)) {
+            $tempstring = 'it is ' . number_format($weather->currently->temperature) . ' degrees.';
         }
-        if (isset($weather->{'currently'}->{'windBearing'})) {
-            $windspeed   = $weather->{'currently'}->{'windSpeed'};
-            $windbearing = $weather->{'currently'}->{'windBearing'};
+        if (isset($weather->currently->windBearing)) {
+            $windspeed   = $weather->currently->windSpeed;
+            $windbearing = $weather->currently->windBearing;
             if ($windspeed <= 3) {
                 // do nothing
-                continue;
+                ;
             } else {
                 $windstring = 'there is a ' . $this->MPHtoBeaufort($windspeed);
                 $windstring .= ' from the ' . $this->BearingToCardinal($windbearing);
             }
         }
-        if (isset($weather->{'currently'}->{'precipType'})) {
-            $precipstring = 'there is a ' . $this->ProbabilityToChance($weather->{'currently'}->{'precipProbability'});
-            $precipstring .= ' of ' . $this->PrecipIntensity($weather->{'currently'}->{'precipIntensity'}) . $weather->{'currently'}->{'precipType'};
+        if (isset($weather->currently->precipType)) {
+            $precipstring = 'there is a ' . $this->ProbabilityToChance($weather->currently->precipProbability);
+            $precipstring .= ' of ' . $this->PrecipIntensity($weather->currently->precipIntensity) . $weather->currently->precipType;
         }
         
         if ($tempstring != "" and $windstring != "" and $precipstring != "") {
@@ -131,29 +131,29 @@ class WeatherSentence
         }
         
         // Forecast
-        $forecast = $weather->{'daily'}->{'data'}[0];
+        $forecast = $weather->daily->data[0];
         
-        $forecastphase = "Today's forecast is " . $forecast->{'summary'};
+        $forecastphrase = "Today's forecast is " . $forecast->summary . '. ';
         
         // Parts
         $tempstring   = "";
         $windstring   = "";
         $precipstring = "";
-        if (isset($forecast->{'temperatureMin'})) {
-            $tempstring = 'there will be a high of ' . number_format($forecast->{'temperatureMax'}) . ' and a low of ' . number_format($forecast->{'temperatureMin'});
+        if (isset($forecast->temperatureMin)) {
+            $tempstring = 'there will be a high of ' . number_format($forecast->temperatureMax) . ' and a low of ' . number_format($forecast->temperatureMin);
         }
-        if (isset($forecast->{'windBearing'})) {
-            if ($forecast->{'windSpeed'} <= 3) {
+        if (isset($forecast->windBearing)) {
+            if ($forecast->windSpeed <= 3) {
                 // do nothing
                 ;
             } else {
-                $windstring = 'there will be a ' . $this->MPHtoBeaufort($forecast->{'windSpeed'});
-                $windstring .= ' from the ' . $this->BearingToCardinal($forecast->{'windBearing'});
+                $windstring = 'there will be a ' . $this->MPHtoBeaufort($forecast->windSpeed);
+                $windstring .= ' from the ' . $this->BearingToCardinal($forecast->windBearing);
             }
         }
-        if (isset($forecast->{'precipType'})) {
-            $precipstring = 'there is a ' . $this->ProbabilityToChance($forecast->{'precipProbability'});
-            $precipstring .= ' of ' . $this->PrecipIntensity($forecast->{'precipIntensity'}) . $forecast->{'precipType'};
+        if (isset($forecast->precipType)) {
+            $precipstring = 'there is a ' . $this->ProbabilityToChance($forecast->precipProbability);
+            $precipstring .= ' of ' . $this->PrecipIntensity($forecast->precipIntensity) . $forecast->precipType;
         }
         
         if ($tempstring != "" and $windstring != "" and $precipstring != "") {
@@ -180,9 +180,9 @@ class WeatherSentence
             $weather = $this->fetchWeather();
         }
         
-        if (isset($weather->{'alert'})) {
-            foreach ($weather->{'alert'} as $alert) {
-                $alertphrase .= ' Alert: ' . $alert->{'description'};
+        if (isset($weather->alert)) {
+            foreach ($weather->alert as $alert) {
+                $alertphrase .= ' Alert: ' . $alert->description;
             }
         }
     }
@@ -284,7 +284,5 @@ class WeatherSentence
     }
 }
 
-class WeatherSentenceTest extends PHPUnit_Framework_TestCase {
-}
 
 ?>

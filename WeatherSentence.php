@@ -85,7 +85,7 @@ class WeatherSentence
         
         // Parts
         if (isset($weather->currently->temperature)) {
-            $tempstring = 'it is ' . number_format($weather->currently->temperature) . ' degrees.';
+            $tempstring = 'it is ' . number_format($weather->currently->temperature) . ' degrees';
         }
         if (isset($weather->currently->windBearing)) {
             $windspeed   = $weather->currently->windSpeed;
@@ -115,6 +115,20 @@ class WeatherSentence
             // Only one string, just joining them will work
             $currentphrase .= ucfirst($tempstring . $windstring . $precipstring);
         }
+
+		if (isset($weather->currently->nearestStormDistance) and ($weather->currently->nearestStormDistance < 100)) {
+			$currentphrase .= ' There is a storm ';
+			if ($weather->currently->nearestStormDistance < 1) {
+				$currentphrase .= 'here.';
+			} else {
+			    $currentphrase .= round($weather->currently->nearestStormDistance, 1);
+				if (isset($weather->currently->nearestStormDistance)) {
+					$currentphrase .= ' miles to the  ' . $this->BearingToCardinal($weather->currently->nearestStormBearing) . '.';
+				} else {
+					$currentphrase .= ' miles away.';
+				}
+			}
+		}
         
         return $currentphrase;
     }
@@ -133,7 +147,7 @@ class WeatherSentence
         // Forecast
         $forecast = $weather->daily->data[0];
         
-        $forecastphrase = "Today's forecast is " . $forecast->summary . '. ';
+        $forecastphrase = "Today's forecast is " . $forecast->summary . ' ';
         
         // Parts
         $tempstring   = "";
@@ -179,12 +193,22 @@ class WeatherSentence
         if (!isset($weather) or $weather == null) {
             $weather = $this->fetchWeather();
         }
-        
-        if (isset($weather->alert)) {
-            foreach ($weather->alert as $alert) {
-                $alertphrase .= ' Alert: ' . $alert->description;
+
+		$alertlist = array();
+
+        if (isset($weather->alerts)) {
+            foreach ($weather->alerts as $alert) {
+				if ($alert->expires > time()){
+					// You may want $alert->description here,
+					// but I found that to be TOO verbose
+					if (!in_array($alert->title, $alertlist)){
+		                $alertphrase .= ' Alert: ' . $alert->title;
+						array_push($alertlist, $alert->title);
+					}
+				}
             }
         }
+		return $alertphrase;
     }
     
     private function BearingToCardinal($bearing)

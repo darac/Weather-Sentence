@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Weather-sentence by darac</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/darac/Weather-Sentence">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/darac/Weather-Sentence/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/darac/Weather-Sentence/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Weather-sentence</h1>
+          <p>A PHP script to make a readable sentence of the current and today&#39;s weather.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/darac">darac</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a id="weather-sentence" class="anchor" href="#weather-sentence" aria-hidden="true"><span class="octicon octicon-link"></span></a>Weather-Sentence</h1>
+
+<p>A PHP script to make a readable sentence of the current and today's weather.</p>
+
+<p>Two parameters are currently handled:</p>
+
+<ul>
+<li>loc={decimal latitude},{decimal longitude}
+Where the forecast is for.</li>
+<li>debug
+Echo the JSON inputs.</li>
+</ul>
+
+<p>The output is a pair of sentences. The first describes the current weather (including wind, precipitiation and temperature if recieved from forecast.io), the second describes the weather forecast for the current day. If any alerts are present, they are appended.</p>
+
+<h2>
+<a id="example-output" class="anchor" href="#example-output" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example Output</h2>
+
+<p>The Weather for Fletching is Drizzle. It is 9 degrees, there is a moderate breeze from the South South West and there is a certainty of very light rain. There will be a high of 10 and a low of 5, there will be a moderate breeze from the South South West and there is a certainty of very light rain.</p>
+
+<h1></h1>
+
+<p><a href="https://travis-ci.org/darac/Weather-Sentence"><img src="https://travis-ci.org/darac/Weather-Sentence.png" alt="Build Status"></a></p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>

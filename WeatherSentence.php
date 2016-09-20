@@ -11,9 +11,9 @@ class WeatherSentence
 	private $debug = false;
     
     // methods
-    public function __construct($loc = null, $debug = false)
+    public function __construct($loc = '', $debug = false)
 	{
-		if (isset($loc) and $loc != null){
+		if (isset($loc) and $loc != ''){
 			$this->loc = $loc;
 		}
 		$this->debug = $debug;
@@ -62,7 +62,7 @@ class WeatherSentence
         }
         
         // Otherwise, fetch the current and daily weather (that is, we skip the minutely and hourly blocks, but get everything else)
-        $json_string   = file_get_contents("http://api.forecast.io/forecast/$this->APIKEY/$this->loc?units=uk&exclude=minutely,hourly");
+        $json_string   = file_get_contents("https://api.darksky.net/forecast/$this->APIKEY/$this->loc?units=uk&exclude=minutely,hourly");
         $this->weather = json_decode($json_string);
         if ($this->debug)
             echo "<pre><code>" . json_encode($this->weather, JSON_PRETTY_PRINT) . "</code></pre><br />";
@@ -113,7 +113,7 @@ class WeatherSentence
             $currentphrase .= ucfirst($tempstring) . " and $windstring.";
         } else {
             // Only one string, just joining them will work
-            $currentphrase .= ucfirst($tempstring . $windstring . $precipstring);
+            $currentphrase .= ucfirst($tempstring . $windstring . $precipstring) . ".";
         }
 
 		if (isset($weather->currently->nearestStormDistance) and ($weather->currently->nearestStormDistance < 100)) {
@@ -147,7 +147,7 @@ class WeatherSentence
         // Forecast
         $forecast = $weather->daily->data[0];
         
-        $forecastphrase = "Today's forecast is " . $forecast->summary . ' ';
+        $forecastphrase = "Today's forecast is " . lcfirst($forecast->summary) . ' ';
         
         // Parts
         $tempstring   = "";
@@ -180,11 +180,26 @@ class WeatherSentence
             $forecastphrase .= ucfirst($tempstring) . " and $windstring.";
         } else {
             // Only one string, just joining them will work
-            $forecastphrase .= ucfirst($tempstring . $windstring . $precipstring);
+            $forecastphrase .= ucfirst($tempstring . $windstring . $precipstring) . ".";
         }
         
         return $forecastphrase;
     }
+
+
+    public function MakeForecastSummary($weather = null)
+    {
+        $forecastphrase = '';
+        
+        if (!isset($weather) or $weather == null) {
+            $weather = $this->fetchWeather();
+        }
+
+		$forecastphrase = "This week's forecast is: ";
+		$forecastphrase .= $weather->daily->summary;
+
+		return $forecastphrase;
+	}
     
     public function MakeAlertSentence($weather = null)
     {
@@ -306,6 +321,7 @@ class WeatherSentence
             return 'heavy ';
         }
     }
+
 }
 
 
